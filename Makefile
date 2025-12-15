@@ -1,4 +1,4 @@
-start:
+start: #start the project
 	docker compose up -d
 
 stop:
