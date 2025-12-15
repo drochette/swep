@@ -24,9 +24,16 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app_network
-
-# Docker Networks
-
+  app_database:
+      image: mysql:8.0.35
+      restart: always
+      environment:
+          MYSQL_ROOT_PASSWORD: common
+          MYSQL_USER: common
+      ports:
+          - "3306:3306"
+      networks:
+          - app_network
 networks:
   app_network:
     driver: bridge
