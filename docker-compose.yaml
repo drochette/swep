@@ -26,15 +26,10 @@ services:
       - app_network
 
   database:
-      image: mariadb:10.7.3
+      image: mariadb
       container_name: app_database
       environment:
           MARIADB_ROOT_PASSWORD: root
-          MARIADB_DATABASE: app
-          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'no'
-      volumes:
-          - database_data:/var/lib/mysql:rw
-          - ./var/mysql:/var/www/var
       ports:
           -   "3306:3306"
       networks:
@@ -42,8 +37,3 @@ services:
 networks:
   app_network:
     driver: bridge
-
-volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###

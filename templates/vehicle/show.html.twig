@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des véhicules{% endblock %}
+
+{% block body %}
+
+    {% if vehicle %}
+        {{ vehicle.label }}
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+           Désolé ce véhicule n'existe pas.
+        </div>
+    {% endif %}
+
+
+{% endblock %}
