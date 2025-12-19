@@ -9,6 +9,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Modele</th>
+            <th scope="col">Campus</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -17,6 +18,7 @@
             <tr>
                 <th scope="row">{{ vehicle.id }}</th>
                 <td>{{ vehicle.label }}</td>
+                <td>{{ vehicle.campus.label }}</td>
                 <td><a href="{{ url('app_vehicle_show', {id: vehicle.id}) }}">Voir</a></td>
             </tr>
         {% endfor %}

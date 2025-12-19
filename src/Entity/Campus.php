@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\VehicleRepository;
+use App\Repository\CampusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: VehicleRepository::class)]
-class Vehicle
+#[ORM\Entity(repositoryClass: CampusRepository::class)]
+class Campus
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,10 +15,6 @@ class Vehicle
 
     #[ORM\Column(length: 255)]
     private ?string $label = null;
-
-    #[ORM\ManyToOne(fetch: 'EAGER')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Campus $campus = null;
 
     public function getId(): ?int
     {
@@ -40,18 +36,6 @@ class Vehicle
     public function setLabel(string $label): static
     {
         $this->label = $label;
-
-        return $this;
-    }
-
-    public function getCampus(): ?Campus
-    {
-        return $this->campus;
-    }
-
-    public function setCampus(?Campus $campus): static
-    {
-        $this->campus = $campus;
 
         return $this;
     }
