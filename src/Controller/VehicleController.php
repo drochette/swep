@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Vehicle;
+use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -34,5 +36,36 @@ final class VehicleController extends AbstractController
         return $this->render('vehicle/show.html.twig', [
             'vehicle' => $vehicle,
         ]);
+    }
+
+    #[Route('/vehicle/add', name: 'app_vehicle_create')]
+    public function addVehicle(Request $request): Response
+    {
+        $vehicle = new Vehicle();
+        $form = $this->createForm(VehicleType::class, $vehicle);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $isExists = $this->vehicleRepository->findOneBy(['label' => $vehicle->getLabel()]);
+            if ($isExists) {
+                $this->addFlash('error', 'Vehicle existe déjà');
+                return $this->render('vehicle/add.html.twig', [
+                    'vehicleForm' => $form,
+                ]);
+            }
+
+            $this->vehicleRepository->save($vehicle);
+
+            $this->addFlash('success', 'Vehicle ajouté');
+
+            return $this->redirectToRoute('app_vehicle_show', ['id' => $vehicle->getId()]);
+        }
+
+        return $this->render('vehicle/add.html.twig', [
+            'vehicleForm' => $form,
+        ]);
+
     }
 }
