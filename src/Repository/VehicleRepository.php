@@ -16,12 +16,11 @@ class VehicleRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicle::class);
     }
 
-
     public function save(Vehicle $vehicle): Vehicle
     {
         $this->getEntityManager()->persist($vehicle);
         $this->getEntityManager()->flush();
+
         return $vehicle;
     }
-
 }

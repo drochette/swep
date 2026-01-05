@@ -16,12 +16,10 @@ class AppCampusFixtures extends Fixture
 
         $manager->persist($campusParis);
 
-
         $campusBlois = new Campus();
         $campusBlois->setLabel('Blois');
         $this->addReference('campus-blois', $campusBlois);
         $manager->persist($campusBlois);
-
 
         $manager->flush();
     }

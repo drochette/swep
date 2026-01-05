@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class VehicleController extends AbstractController
 {
-
     public function __construct(private VehicleRepository $vehicleRepository)
     {
     }
@@ -28,7 +27,6 @@ final class VehicleController extends AbstractController
             'htmlcontent' => '<b>test</b>',
         ]);
     }
-
 
     #[Route('/vehicle/{id}', name: 'app_vehicle_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(int $id): Response
@@ -44,15 +42,15 @@ final class VehicleController extends AbstractController
     public function addVehicle(Request $request): Response
     {
         $vehicle = new Vehicle();
+
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
             $isExists = $this->vehicleRepository->findOneBy(['label' => $vehicle->getLabel()]);
             if ($isExists) {
                 $this->addFlash('error', 'Vehicle existe déjà');
+
                 return $this->render('vehicle/add.html.twig', [
                     'vehicleForm' => $form,
                 ]);
@@ -68,6 +66,5 @@ final class VehicleController extends AbstractController
         return $this->render('vehicle/add.html.twig', [
             'vehicleForm' => $form,
         ]);
-
     }
 }
