@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\VehicleBookingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehicleBookingRepository::class)]
 class VehicleBooking
@@ -17,6 +18,7 @@ class VehicleBooking
     private \DateTimeImmutable $startAt;
 
     #[ORM\Column]
+    #[Assert\GreaterThan(propertyPath: 'startAt')]
     private \DateTimeImmutable $endAt;
 
     #[ORM\ManyToOne()]

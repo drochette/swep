@@ -1,1 +1,3 @@
 vehicle.form.label.image: Image principale du véhicule
+vehicle.already.booked: Le véhicule est déjà reservé
+user.reservation.in_progress: Vous avez déjà un véhicule de reservé sur ces dates

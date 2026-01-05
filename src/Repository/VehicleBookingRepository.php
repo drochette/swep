@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
+use App\Entity\Vehicle;
 use App\Entity\VehicleBooking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,28 +24,35 @@ class VehicleBookingRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return VehicleBooking[] Returns an array of VehicleBooking objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function isVehicleBooked(
+        Vehicle $vehicle,
+        \DateTimeImmutable $startAt,
+        \DateTimeImmutable $endAt,
+    ): bool {
+        $result = $this->createQueryBuilder('vb')
+            ->andWhere('vb.vehicle = :vehicle')
+            ->andWhere('vb.startAt BETWEEN :startAt AND :endAt OR vb.endAt BETWEEN :startAt AND :endAt')
+            ->setParameter('vehicle', $vehicle)
+            ->setParameter('startAt', $startAt)
+            ->setParameter('endAt', $endAt)
+            ->getQuery()->getResult();
 
-    //    public function findOneBySomeField($value): ?VehicleBooking
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return count($result) > 0;
+    }
+
+    public function isUserHasAlreadyAReservation(
+        User $user,
+        \DateTimeImmutable $startAt,
+        \DateTimeImmutable $endAt,
+    ): bool {
+        $result = $this->createQueryBuilder('vb')
+            ->andWhere('vb.bookedBy = :user')
+            ->andWhere('vb.startAt BETWEEN :startAt AND :endAt OR vb.endAt BETWEEN :startAt AND :endAt')
+            ->setParameter('user', $user)
+            ->setParameter('startAt', $startAt)
+            ->setParameter('endAt', $endAt)
+            ->getQuery()->getResult();
+
+        return count($result) > 0;
+    }
 }

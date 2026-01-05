@@ -4,28 +4,28 @@ namespace App\Controller;
 
 use App\Entity\Vehicle;
 use App\Entity\VehicleBooking;
+use App\Exception\UserHasAlreadyAReservationException;
+use App\Exception\VehicleAlreadyBookedException;
 use App\Form\VehicleBookingType;
 use App\Form\VehicleType;
-use App\Repository\VehicleBookingRepository;
 use App\Repository\VehicleRepository;
+use App\Service\BookVehicleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 final class VehicleController extends AbstractController
 {
     public function __construct(
         private VehicleRepository $vehicleRepository,
-        private VehicleBookingRepository $vehicleBookingRepository,
-        private MailerInterface $mailer,
-        private readonly string $fromEmail,
+        private BookVehicleService $bookVehicleService,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -106,9 +106,16 @@ final class VehicleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $bookingVehicle->setVehicle($vehicle);
             $bookingVehicle->setBookedBy($this->getUser());
-            $this->vehicleBookingRepository->save($bookingVehicle);
 
-            $this->sendConfirmationEmail($bookingVehicle);
+            try {
+                $this->bookVehicleService->bookVehicle($bookingVehicle);
+            } catch (VehicleAlreadyBookedException|UserHasAlreadyAReservationException $exception) {
+                $this->addFlash('error', $this->translator->trans($exception->getMessage()));
+
+                return $this->render('vehicle/book-vehicle.html.twig', [
+                    'vehicleBookingForm' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_home');
         }
@@ -116,30 +123,5 @@ final class VehicleController extends AbstractController
         return $this->render('vehicle/book-vehicle.html.twig', [
             'vehicleBookingForm' => $form,
         ]);
-    }
-
-    private function sendConfirmationEmail(VehicleBooking $vehicleBooking): void
-    {
-        $bookedBy = $vehicleBooking->getBookedBy();
-        $vehicle = $vehicleBooking->getVehicle();
-
-        $email = (new Email())
-            ->from($this->fromEmail)
-            ->to($bookedBy->getEmail())
-            ->subject(
-                sprintf(
-                    'Reservation pris du %s au %s',
-                    $vehicleBooking->getStartAt()->format('d/m/Y'),
-                    $vehicleBooking->getEndAt()->format('d/m/Y')
-                ))
-            ->html(
-                sprintf(
-                    '<p>La réservation a bien été prise en compte pour le véhicule %s immatriculé %s!</p>',
-                    $vehicle->getLabel(),
-                    $vehicle->getRegistrationNumber()
-                )
-            );
-
-        $this->mailer->send($email);
     }
 }
