@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Modèle</th>
+            <th>Immatriculation</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>
+                        {{ booking.vehicle.label }}
+                    </td>
+                    <td>
+                        {{ booking.vehicle.registrationNumber }}
+                    </td>
+                    <td>
+                        {{ booking.startAt|date("d/m/Y H:i") }}
+                    </td>
+                    <td>
+                        {{ booking.endAt|date("d/m/Y H:i") }}
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

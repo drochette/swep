@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Vehicle;
+use App\Entity\VehicleBooking;
+use App\Form\VehicleBookingType;
 use App\Form\VehicleType;
+use App\Repository\VehicleBookingRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,8 +19,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class VehicleController extends AbstractController
 {
-    public function __construct(private VehicleRepository $vehicleRepository)
-    {
+    public function __construct(
+        private VehicleRepository $vehicleRepository,
+        private VehicleBookingRepository $vehicleBookingRepository,
+    ) {
     }
 
     #[Route('/vehicle', name: 'app_vehicle_list')]
@@ -72,6 +77,38 @@ final class VehicleController extends AbstractController
 
         return $this->render('vehicle/add.html.twig', [
             'vehicleForm' => $form,
+        ]);
+    }
+
+    #[Route(
+        path: '/vehicle/{id}/book',
+        name: 'app_book_a_vehicle',
+        requirements: ['id' => Requirement::DIGITS],
+        methods: ['POST', 'GET'])
+    ]
+    public function bookAVehicle(?Vehicle $vehicle = null, Request $request)
+    {
+        $bookingVehicle = new VehicleBooking();
+
+        if (null === $vehicle) {
+            $this->addFlash('error', 'Le véhicule n\'existe pas');
+
+            return $this->redirectToRoute('app_vehicle_list');
+        }
+
+        $form = $this->createForm(VehicleBookingType::class, $bookingVehicle);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $bookingVehicle->setVehicle($vehicle);
+            $bookingVehicle->setBookedBy($this->getUser());
+            $this->vehicleBookingRepository->save($bookingVehicle);
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('vehicle/book-vehicle.html.twig', [
+            'vehicleBookingForm' => $form,
         ]);
     }
 }

@@ -11,7 +11,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('app_vehicle_list') }}">Vehicules</a>
                 </li>
-
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('app_user_booked_vehicles') }}">Mes reservations</a>
+                    </li>
+                {% endif %}
             </ul>
             <span class="navbar-text">
                 {% if app.user %}
