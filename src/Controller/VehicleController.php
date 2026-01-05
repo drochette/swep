@@ -9,9 +9,11 @@ use App\Exception\VehicleAlreadyBookedException;
 use App\Form\VehicleBookingType;
 use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
+use App\ResponseModel\VehicleModel;
 use App\Service\BookVehicleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,8 +36,19 @@ final class VehicleController extends AbstractController
     {
         return $this->render('vehicle/list.html.twig', [
             'vehicles' => $this->vehicleRepository->findAll(),
-            'htmlcontent' => '<b>test</b>',
         ]);
+    }
+
+    #[Route('/api/vehicles', name: 'api_vehicle_list')]
+    public function apiVehiclesList(): JsonResponse
+    {
+        $vehicles = $this->vehicleRepository->findAll();
+        $vehicleResponses = [];
+        foreach ($vehicles as $vehicle) {
+            $vehicleResponses[] = VehicleModel::fromVehicle($vehicle);
+        }
+
+        return $this->json($vehicleResponses);
     }
 
     #[Route('/vehicle/{id}', name: 'app_vehicle_show', requirements: ['id' => Requirement::DIGITS])]

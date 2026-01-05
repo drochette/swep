@@ -21,6 +21,7 @@ class AppUserFixtures extends Fixture
         $user->setEmail('rochette.damien@gmail.com');
         $user->setPassword($password);
         $user->setRoles(['ROLE_USER']);
+        $user->setApiToken(sha1(time()));
 
         $manager->persist($user);
         $manager->flush();
