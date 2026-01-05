@@ -20,6 +20,9 @@ class Vehicle
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mainImage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +55,18 @@ class Vehicle
     public function setCampus(?Campus $campus): static
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getMainImage(): ?string
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(?string $mainImage): static
+    {
+        $this->mainImage = $mainImage;
 
         return $this;
     }

@@ -6,6 +6,7 @@ use App\Entity\Vehicle;
 use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -56,6 +57,12 @@ final class VehicleController extends AbstractController
                 ]);
             }
 
+            /** @var UploadedFile $uploadFile */
+            $uploadFile = $form->get('image')->getData();
+            $fileName = uniqid().'.'.$uploadFile->getClientOriginalExtension();
+            $targetDir = $this->getParameter('kernel.project_dir').'/public/images/vehicles';
+            $uploadFile->move($targetDir, $fileName);
+            $vehicle->setMainImage($fileName);
             $this->vehicleRepository->save($vehicle);
 
             $this->addFlash('success', 'Vehicle ajouté');

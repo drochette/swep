@@ -4,7 +4,10 @@
 {% block body %}
 
     {% if vehicle %}
-        {{ vehicle.label }}
+        <h2>{{ vehicle.label }}</h2>
+        <p>
+            <img src="{{ asset('images/vehicles/'~vehicle.mainImage) }}" alt="{{ vehicle.label }}" width="400px">
+        </p>
     {% else %}
         <div class="alert alert-warning" role="alert">
            Désolé ce véhicule n'existe pas.
