@@ -15,12 +15,15 @@ class AppVehicleFixtures extends Fixture
         $vehicle->setId(1);
         $vehicle->setLabel('Peugeot 208');
         $vehicle->setCampus($this->getReference('campus-paris', Campus::class));
+        $vehicle->setRegistrationNumber('AA-123-BB');
         $manager->persist($vehicle);
 
         $vehicleBlois = new Vehicle();
         $vehicleBlois->setId(1);
         $vehicleBlois->setLabel('Renault R5');
         $vehicleBlois->setCampus($this->getReference('campus-blois', Campus::class));
+        $vehicleBlois->setRegistrationNumber('CC-123-DD');
+
         $manager->persist($vehicleBlois);
 
         $manager->flush();

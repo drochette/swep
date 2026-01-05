@@ -6,6 +6,9 @@ use App\Repository\VehicleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
+#[ORM\UniqueConstraint(name: 'vehicle_registration_number_uniq_idx', columns: ['registration_number'])]
+#[ORM\Index(name: 'vehicle_label_idx', columns: ['label'])]
+#[ORM\HasLifecycleCallbacks]
 class Vehicle
 {
     #[ORM\Id]
@@ -22,6 +25,15 @@ class Vehicle
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $mainImage = null;
+
+    #[ORM\Column(length: 20)]
+    private string $registrationNumber;
+
+    #[ORM\Column]
+    private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column]
+    private \DateTimeImmutable $updatedAt;
 
     public function getId(): ?int
     {
@@ -69,5 +81,40 @@ class Vehicle
         $this->mainImage = $mainImage;
 
         return $this;
+    }
+
+    public function getRegistrationNumber(): ?string
+    {
+        return $this->registrationNumber;
+    }
+
+    public function setRegistrationNumber(string $registrationNumber): static
+    {
+        $this->registrationNumber = $registrationNumber;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    #[ORM\PrePersist]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

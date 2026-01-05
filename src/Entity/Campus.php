@@ -6,6 +6,7 @@ use App\Repository\CampusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CampusRepository::class)]
+#[ORM\Index(name: 'campus_label_idx', columns: ['label'])]
 class Campus
 {
     #[ORM\Id]

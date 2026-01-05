@@ -28,6 +28,16 @@ class VehicleType extends AbstractType
                 'class' => Campus::class,
                 'choice_label' => 'label',
             ])
+            ->add(
+                'registrationNumber',
+                TextType::class,
+                [
+                    'required' => true,
+                    'constraints' => [
+                        new Length(min: 3, max: 20),
+                    ],
+                ]
+            )
             ->add('image', FileType::class,
                 [
                     'mapped' => false,
