@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -32,10 +33,18 @@ final class VehicleController extends AbstractController
     }
 
     #[Route('/vehicle', name: 'app_vehicle_list')]
-    public function index(): Response
-    {
+    public function index(
+        #[MapQueryString] PaginationDto $paginationDto,
+    ): Response {
+        $paginatedVehicles = $this->vehicleRepository->findAllPaginated(
+            $paginationDto->page,
+            $paginationDto->limit,
+            $paginationDto->filters->label
+        );
+
         return $this->render('vehicle/list.html.twig', [
-            'vehicles' => $this->vehicleRepository->findAll(),
+            'vehicles' => $paginatedVehicles->getIterator(),
+            'totalCount' => $paginatedVehicles->count(),
         ]);
     }
 

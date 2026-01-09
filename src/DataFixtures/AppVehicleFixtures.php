@@ -23,8 +23,15 @@ class AppVehicleFixtures extends Fixture
         $vehicleBlois->setLabel('Renault R5');
         $vehicleBlois->setCampus($this->getReference('campus-blois', Campus::class));
         $vehicleBlois->setRegistrationNumber('CC-123-DD');
-
         $manager->persist($vehicleBlois);
+
+        foreach (['Twingo', 'Clio 4', 'Captur', 'Golf', 'Polo', 'Touareg'] as $label) {
+            $vehicle = new Vehicle();
+            $vehicle->setLabel($label);
+            $vehicle->setCampus($this->getReference('campus-blois', Campus::class));
+            $vehicle->setRegistrationNumber(substr(md5($label), 0, 8));
+            $manager->persist($vehicle);
+        }
 
         $manager->flush();
     }

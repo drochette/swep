@@ -41,8 +41,6 @@ final class VehicleBookingVoter extends Voter
             return true;
         }
 
-        $vote->addReason('User is not the owner of the vehicle booking.');
-
         return false;
     }
 }
