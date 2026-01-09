@@ -29,6 +29,11 @@ final class BookVehicleService
         $this->sendConfirmationEmail($vehicleBooking);
     }
 
+    public function delete(VehicleBooking $vehicleBooking): void
+    {
+        $this->vehicleBookingRepository->delete($vehicleBooking);
+    }
+
     /**
      * @throws VehicleAlreadyBookedException
      */

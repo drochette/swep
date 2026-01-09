@@ -8,6 +8,7 @@
             <th>Immatriculation</th>
             <th>Date début</th>
             <th>Date fin</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,9 @@
                     </td>
                     <td>
                         {{ booking.endAt|date("d/m/Y H:i") }}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_delete_user_booked_vehicle', {'id': booking.id}) }}" class="btn btn-danger">Supprimer</a>
                     </td>
                 </tr>
 

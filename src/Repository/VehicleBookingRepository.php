@@ -24,6 +24,12 @@ class VehicleBookingRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function delete(VehicleBooking $vehicleBooking): void
+    {
+        $this->getEntityManager()->remove($vehicleBooking);
+        $this->getEntityManager()->flush();
+    }
+
     public function isVehicleBooked(
         Vehicle $vehicle,
         \DateTimeImmutable $startAt,

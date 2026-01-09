@@ -24,6 +24,14 @@ class AppUserFixtures extends Fixture
         $user->setApiToken(sha1(time()));
 
         $manager->persist($user);
+
+        $userAdmin = new User();
+        $userAdmin->setEmail('adminuser@example.fr');
+        $userAdmin->setPassword($this->userPasswordHasher->hashPassword(new User(), 'password_admin'));
+        $userAdmin->setRoles(['ROLE_ADMIN']);
+        $userAdmin->setApiToken(sha1(time()));
+        $manager->persist($userAdmin);
+
         $manager->flush();
     }
 }
