@@ -1,0 +1,5 @@
+framework:
+  http_client:
+    scoped_clients:
+      nhtsa.client:
+        base_uri: '%env(HTTP_CARS_CLIENT_URI)%'
