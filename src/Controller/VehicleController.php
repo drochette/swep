@@ -11,6 +11,7 @@ use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
 use App\ResponseModel\VehicleModel;
 use App\Service\BookVehicleService;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,7 @@ final class VehicleController extends AbstractController
         private VehicleRepository $vehicleRepository,
         private BookVehicleService $bookVehicleService,
         private TranslatorInterface $translator,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -36,11 +38,27 @@ final class VehicleController extends AbstractController
     public function index(
         #[MapQueryString] PaginationDto $paginationDto,
     ): Response {
+        $hash = md5('test');
+
         $paginatedVehicles = $this->vehicleRepository->findAllPaginated(
             $paginationDto->page,
             $paginationDto->limit,
-            $paginationDto->filters->label
+            $paginationDto->filters?->label
         );
+
+        $this->logger->info('Listing des véhicules', [
+            'filter' => $paginationDto->filters,
+            'userId' => $this->getUser()->getUserIdentifier(),
+            'context_name' => 'app_vehicle_list',
+            'id' => $hash,
+        ]
+        );
+
+        $this->logger->error('error sur le listing des véhicules', [
+            'userId' => $this->getUser()->getUserIdentifier(),
+            'context_name' => 'app_vehicle_list',
+            'id' => $hash,
+        ]);
 
         return $this->render('vehicle/list.html.twig', [
             'vehicles' => $paginatedVehicles->getIterator(),

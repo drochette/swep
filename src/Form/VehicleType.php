@@ -48,7 +48,7 @@ class VehicleType extends AbstractType
                     ],
                 ]
             )
-            ->add('submit', SubmitType::class, ['label' => 'Ajouter un véhicule'])
+            ->add('submit', SubmitType::class, ['label' => 'Ajouter'])
         ;
     }
 
