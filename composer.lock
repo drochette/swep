@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2404162bf89c03d9b822815e004bfc3a",
+    "content-hash": "985432c7ec41a8b13f3cfc0fb59ba8f3",
     "packages": [
         {
             "name": "composer/semver",
@@ -3279,6 +3279,89 @@
                 }
             ],
             "time": "2025-11-12T15:46:48+00:00"
+        },
+        {
+            "name": "symfony/fake-sms-notifier",
+            "version": "v8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/fake-sms-notifier.git",
+                "reference": "c911595b2f1621821026fcbd6f9421aac73211f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/fake-sms-notifier/zipball/c911595b2f1621821026fcbd6f9421aac73211f4",
+                "reference": "c911595b2f1621821026fcbd6f9421aac73211f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4",
+                "symfony/http-client": "^7.4|^8.0",
+                "symfony/notifier": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "psr/log": "^1|^2|^3",
+                "symfony/mailer": "^7.4|^8.0"
+            },
+            "type": "symfony-notifier-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\Bridge\\FakeSms\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Hemery",
+                    "homepage": "https://github.com/JamesHemery"
+                },
+                {
+                    "name": "Antoine Makdessi",
+                    "email": "amakdessi@me.com",
+                    "homepage": "http://antoine.makdessi.free.fr"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Fake SMS (as email or log during development) Notifier Bridge.",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "development",
+                "email",
+                "notifier",
+                "sms",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/fake-sms-notifier/tree/v8.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-11-16T10:17:21+00:00"
         },
         {
             "name": "symfony/filesystem",

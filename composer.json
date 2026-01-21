@@ -21,6 +21,7 @@
         "symfony/doctrine-messenger": "8.0.*",
         "symfony/dotenv": "8.0.*",
         "symfony/expression-language": "8.0.*",
+        "symfony/fake-sms-notifier": "8.0.*",
         "symfony/flex": "^2.10",
         "symfony/form": "8.0.*",
         "symfony/framework-bundle": "8.0.*",

@@ -6,16 +6,15 @@ namespace App\Service;
 
 use App\Entity\VehicleBooking;
 use App\Exception\VehicleAlreadyBookedException;
+use App\Message\VehicleBookedMessage;
 use App\Repository\VehicleBookingRepository;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class BookVehicleService
 {
     public function __construct(
-        private MailerInterface $mailer,
-        private readonly string $fromEmail,
         private readonly VehicleBookingRepository $vehicleBookingRepository,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -26,7 +25,8 @@ final class BookVehicleService
 
         $this->vehicleBookingRepository->save($vehicleBooking);
 
-        $this->sendConfirmationEmail($vehicleBooking);
+        $vehicleBookedMessage = new VehicleBookedMessage($vehicleBooking);
+        $this->messageBus->dispatch($vehicleBookedMessage);
     }
 
     public function delete(VehicleBooking $vehicleBooking): void
@@ -65,30 +65,5 @@ final class BookVehicleService
         }
 
         return null;
-    }
-
-    private function sendConfirmationEmail(VehicleBooking $vehicleBooking): void
-    {
-        $bookedBy = $vehicleBooking->getBookedBy();
-        $vehicle = $vehicleBooking->getVehicle();
-
-        $email = (new Email())
-            ->from($this->fromEmail)
-            ->to($bookedBy->getEmail())
-            ->subject(
-                sprintf(
-                    'Reservation pris du %s au %s',
-                    $vehicleBooking->getStartAt()->format('d/m/Y'),
-                    $vehicleBooking->getEndAt()->format('d/m/Y')
-                ))
-            ->html(
-                sprintf(
-                    '<p>La réservation a bien été prise en compte pour le véhicule %s immatriculé %s!</p>',
-                    $vehicle->getLabel(),
-                    $vehicle->getRegistrationNumber()
-                )
-            );
-
-        $this->mailer->send($email);
     }
 }
