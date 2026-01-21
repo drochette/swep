@@ -1,3 +1,5 @@
+[![SWEP](https://github.com/drochette/swep/actions/workflows/symfony.yml/badge.svg)](https://github.com/drochette/swep/actions/workflows/symfony.yml)
+
 # SWEP - Vehicle Booking System
 
 A Symfony-based vehicle booking application that allows users to browse and book vehicles. It also integrates with external APIs to fetch vehicle brand information.
