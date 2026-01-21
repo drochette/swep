@@ -15,6 +15,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('app_user_booked_vehicles') }}">Mes reservations</a>
                     </li>
+
+                    {% if app.user.isAdmin %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('app_admin_dashboard') }}">Administration</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
             <span class="navbar-text">

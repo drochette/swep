@@ -27,3 +27,6 @@
 ###< friendsofphp/php-cs-fixer ###
 
 /public/images/vehicles/
+
+/report
+/report-coverage
